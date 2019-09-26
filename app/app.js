@@ -1,0 +1,63 @@
+import Vue from "nativescript-vue";
+import App from "./components/App";
+import Home from "./components/Home";
+import Start from "./components/Start";
+import DrawerContent from "./components/DrawerContent";
+import RadSideDrawer from "nativescript-ui-sidedrawer/vue";
+import RadListView from "nativescript-ui-listview/vue";
+import * as helperService from "./shared/service/helperService";
+Vue.use(RadSideDrawer);
+Vue.use(RadListView);
+
+//register
+Vue.registerElement('CheckBox',() => require('@nstudio/nativescript-checkbox').CheckBox,
+  { model: { prop: 'checked', event: 'checkedChange'} }
+);
+Vue.registerElement('ImageZoom', () => require('nativescript-image-zoom').ImageZoom)
+Vue.config.silent = (TNS_ENV === 'production');
+
+
+// check if it is the first start
+if(!helperService.default.getFirstStartUp()){
+  new Vue({
+    render (h) {
+        return h(
+          App,
+          [
+            h(DrawerContent, { slot: 'drawerContent' }),
+            h(Start, { slot: 'mainContent' })
+          ]
+        )
+      },
+      data() {
+        return {
+          course: "",
+          loc: 0,
+          sem: 0,
+        }
+      },
+  }).$start();
+}else{
+  //open normaly the application
+  new Vue({
+    render (h) {
+        return h(
+          App,
+          [
+            h(DrawerContent, { slot: 'drawerContent' }),
+            h(Home, { slot: 'mainContent' })
+          ]
+        )
+      },
+      data() {
+        return {
+          cou: helperService.default.getSavedCourse(),
+          locId: helperService.default.getSavedLocation(),
+          loc: helperService.default.getLocatons()[helperService.default.getSavedLocation()],
+          sem: helperService.default.getSavedSemester(),
+        }
+      },
+  }).$start();
+}
+
+

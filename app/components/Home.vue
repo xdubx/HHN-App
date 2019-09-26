@@ -1,0 +1,172 @@
+<template>
+    <Page class="page">
+        <ActionBar class="action-bar">
+            <!-- 
+            Use the NavigationButton as a side-drawer button in Android
+            because ActionItems are shown on the right side of the ActionBar
+            -->
+            <NavigationButton ios:visibility="collapsed" icon="res://menu" @tap="onDrawerButtonTap"></NavigationButton>
+            <!-- 
+            Use the ActionItem for IOS with position set to left. Using the
+            NavigationButton as a side-drawer button in iOS is not possible,
+            because its function is to always navigate back in the application.
+            -->
+            <ActionItem icon="res://navigation/menu" 
+                android:visibility="collapsed" 
+                @tap="onDrawerButtonTap"
+                ios.position="left">
+            </ActionItem>
+            <Label class="action-bar-title" text="Home"></Label>
+        </ActionBar>
+
+        <GridLayout class="page-content">
+            <RadListView v-if="!isLoading" for="item in eventsList" @itemTap="onItemTap" class="list-group">
+                <ListViewLinearLayout v-tkListViewLayout scrollDirection="Vertical"/>
+                <v-template>
+                    <GridLayout rows="*, *, *" columns="*" class="list-group-item-content">
+                        <Label :text="item.name" class="text-primary list-group-item-text font-weight-bold"/>
+                        <Label col="1" horizontalAlignment="right" class="list-group-item-text m-r-5">
+                            <FormattedString>
+                                <Span text.decode="&#xf2bd;" class="fa text-primary"/>
+                                <Span :text="shortText(item.prof)"/>  <!-- prof -->
+                            </FormattedString>
+                        </Label>
+
+                        <Label row="1" class="hr-light m-t-5 m-b-5" colSpan="2"/>
+
+                        <!-- <Image row="2" :src="item.ImageUrl" stretch="aspectFill" height="120" class="m-r-20" loadMode="async"/> -->
+
+                        <StackLayout row="2" col="0" verticalAlignment="center" class="list-group-item-text">
+                            <Label class="p-b-10">
+                                <FormattedString ios.fontFamily="system">
+                                    <Span text.decode="&#xf144;" class="fa text-primary icon-gray"></Span>
+                                    <Span :text="item.start" class="text-left-margin"/> 
+                                </FormattedString>
+                            </Label>
+                            <Label class="p-b-10">
+                                <FormattedString ios.fontFamily="system">
+                                    <Span text.decode="&#xf28d;" class="fa text-primary icon-gray"/>
+                                    <Span :text="item.end" class="text-left-margin"/> 
+                                </FormattedString>
+                            </Label>
+                            <Label class="p-b-10">
+                                <FormattedString ios.fontFamily="system">
+                                    <Span text.decode="&#xf21d;" class="fa text-primary icon-gray"/>
+                                    <Span :text="item.location" class="text-left-margin"/>
+                                </FormattedString>
+                            </Label>
+                        </StackLayout>
+                    </GridLayout>
+                </v-template>
+            </RadListView>
+            <ActivityIndicator v-else :busy="isLoading"/>
+        </GridLayout>
+
+    </Page>
+</template>
+
+<script>
+/**
+ * TODO Load only the courses for this day + events + mensa link 
+ */
+
+    import * as utils from "~/shared/utils";
+    import SelectedPageService from "../shared/selected-page-service";
+    import * as icalPaser from '../shared/service/icalPasService';
+    export default {
+        data() {
+            return {
+                eventListHolder : []
+            }
+        },
+        mounted() {
+            SelectedPageService.getInstance().updateSelectedPage("Home");
+        },
+        computed: {
+            message() {
+                return "<!-- Page content goes here -->";
+            },
+            isLoading() {
+                return !this.eventsList.length;
+            },
+            eventsList(){
+                return this.eventListHolder;
+            }
+        },
+        methods: {
+            onDrawerButtonTap() {
+                utils.showDrawer();
+            },
+            onItemTap(){
+               // this.$emit("select", e.item);
+               // TODO open modal with details
+            },
+            shortText(text){//
+                var holder = text.split("\\");
+                var output = "";
+                if(holder.length > 1){
+                    if(holder[0].length + holder[1].length < 30){
+                        output = holder[0] + holder[1];
+                    }else{
+                        output = holder[0];
+                    }
+                }else{
+                    output = text;
+                }
+                
+                return output;    
+            }
+        },
+        mounted() {
+            icalPaser.default.getIcalString("http://icalservice.bplaced.net/SEB4.ics").then(result =>{
+            var course = icalPaser.default.paseToCourseArray(result);
+            var x = icalPaser.default.sortByDate(course);
+            var clearedSort = icalPaser.default.removeOldData(x);
+            var sort = icalPaser.default.sortToOneArray(clearedSort);
+
+            this.eventListHolder = sort.slice(0);
+            //LS.setItem("Course",JSON.stringify(sort));
+            }).catch(e =>{
+                console.log("error in ical result:" + e);
+            });
+            
+            // if(events !== null){
+            //     this.$root.eventList = JSON.parse(events);
+                
+            // }else{
+            //     icalPaser.default.getIcalString("").then(result =>{
+            //         events = icalPaser.default.paseToEventArray(result);
+            //         this.$root.eventList = JSON.parse(events);
+            //         LS.setItem(JSON.stringify(events));
+            //     }).catch();
+            // }
+        },
+    };
+</script>
+
+<style scoped lang="scss">
+    // Start custom common variables
+    @import '../app-variables';
+    // End custom common variables
+
+    // Custom styles
+      .list-group {
+        .list-group-item-content {
+            padding: 8 15 4 15;
+            background-color: $background-light;
+        }
+
+        .list-group-item-text {
+            margin: 2 3;
+        }
+        .text-left-margin{
+            margin-left: 5px;
+        }
+        .icon-green{
+            color: $success-dark;
+        }
+        .icon-gray{
+            color: $item-color-android;
+        }
+    }
+</style>
