@@ -12,12 +12,12 @@
                         <Label col="1" text="Home" class="p-r-10"></Label>
                     </GridLayout>
 
-                    <GridLayout columns="auto, *" :class="'sidedrawer-list-item' + (selectedPage === 'Browse' ? ' selected': '')" @tap="onNavigationItemTap(Browse)">
+                    <GridLayout columns="auto, *" :class="'sidedrawer-list-item' + (selectedPage === 'Calender' ? ' selected': '')" @tap="onNavigationItemTap(Calender)">
                         <Label col="0" text.decode="&#xf1ea;" class="fa"></Label>
                         <Label col="1" text="Calendar" class="p-r-10"></Label>
                     </GridLayout>
 
-                    <GridLayout columns="auto, *" :class="'sidedrawer-list-item' + (selectedPage === 'Map' ? ' selected': '')" @tap="onNavigationItemTap(Map)">
+                    <GridLayout columns="auto, *" :class="'sidedrawer-list-item' + (selectedPage === 'Maps' ? ' selected': '')" @tap="onNavigationItemTap(Maps)">
                         <Label col="0" text.decode="&#xf002;" class="fa"></Label>
                         <Label col="1" text="Map" class="p-r-10"></Label>
                     </GridLayout>
@@ -47,9 +47,9 @@
  * TODO Update Font awesome icons
  */
     import Home from "./Home";
-    import Browse from "./Browse";
+    import Calender from "./Calender";
     import Tips from "./Tips";
-    import Map from "./Map";
+    import Maps from "./Maps";
     import Settings from "./Settings";
     import About from "./About";
     import * as utils from "~/shared/utils";
@@ -63,9 +63,9 @@
         data () {
             return {
                 Home: Home,
-                Browse: Browse,
+                Calender: Calender,
                 Tips: Tips,
-                Map: Map,
+                Maps: Maps,
                 Settings: Settings,
                 About: About,
                 selectedPage: ""
@@ -81,9 +81,9 @@
         },
         components: {
             Home,
-            Browse,
+            Calender,
             Tips,
-            Map,
+            Maps,
             Settings,
             About
         },

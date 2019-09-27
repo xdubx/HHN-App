@@ -25,12 +25,6 @@
                 <v-template>
                     <GridLayout rows="*, *, *" columns="*" class="list-group-item-content">
                         <Label :text="item.name" class="text-primary list-group-item-text font-weight-bold"/>
-                        <Label col="1" horizontalAlignment="right" class="list-group-item-text m-r-5">
-                            <FormattedString>
-                                <Span text.decode="&#xf2bd;" class="fa text-primary"/>
-                                <Span :text="shortText(item.prof)"/>  <!-- prof -->
-                            </FormattedString>
-                        </Label>
 
                         <Label row="1" class="hr-light m-t-5 m-b-5" colSpan="2"/>
 
@@ -46,7 +40,7 @@
                             <Label class="p-b-10">
                                 <FormattedString ios.fontFamily="system">
                                     <Span text.decode="&#xf28d;" class="fa text-primary icon-gray"/>
-                                    <Span :text="item.end" class="text-left-margin"/> 
+                                    <Span :text="item.edbd" class="text-left-margin"/> 
                                 </FormattedString>
                             </Label>
                             <Label class="p-b-10">
@@ -72,7 +66,7 @@
 
     import * as utils from "~/shared/utils";
     import SelectedPageService from "../shared/selected-page-service";
-    import * as icalPaser from '../shared/service/icalPasService';
+    import helperService from '../shared/service/helperService';
     export default {
         data() {
             return {
@@ -90,7 +84,7 @@
                 return !this.eventsList.length;
             },
             eventsList(){
-                return this.eventListHolder;
+                return helperService.getDataForToDay(this.$root.renderEntities);
             }
         },
         methods: {
@@ -116,30 +110,6 @@
                 
                 return output;    
             }
-        },
-        mounted() {
-            icalPaser.default.getIcalString("http://icalservice.bplaced.net/SEB4.ics").then(result =>{
-            var course = icalPaser.default.paseToCourseArray(result);
-            var x = icalPaser.default.sortByDate(course);
-            var clearedSort = icalPaser.default.removeOldData(x);
-            var sort = icalPaser.default.sortToOneArray(clearedSort);
-
-            this.eventListHolder = sort.slice(0);
-            //LS.setItem("Course",JSON.stringify(sort));
-            }).catch(e =>{
-                console.log("error in ical result:" + e);
-            });
-            
-            // if(events !== null){
-            //     this.$root.eventList = JSON.parse(events);
-                
-            // }else{
-            //     icalPaser.default.getIcalString("").then(result =>{
-            //         events = icalPaser.default.paseToEventArray(result);
-            //         this.$root.eventList = JSON.parse(events);
-            //         LS.setItem(JSON.stringify(events));
-            //     }).catch();
-            // }
         },
     };
 </script>

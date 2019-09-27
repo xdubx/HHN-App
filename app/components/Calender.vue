@@ -16,7 +16,7 @@
                 @tap="onDrawerButtonTap"
                 ios.position="left">
             </ActionItem>
-            <Label class="action-bar-title" text="Browse"></Label>
+            <Label class="action-bar-title" text="Calender"></Label>
         </ActionBar>
 
         <GridLayout class="page-content">
@@ -32,8 +32,14 @@
     import SelectedPageService from "../shared/selected-page-service";
 
     export default {
+        data() {
+            return {
+                eventListHolder : []
+            }
+        },
         mounted() {
-            SelectedPageService.getInstance().updateSelectedPage("Browse");
+            SelectedPageService.getInstance().updateSelectedPage("Calender");
+             this.eventListHolder = this.$root.renderEntities;
         },
         computed: {
             message() {

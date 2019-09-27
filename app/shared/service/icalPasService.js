@@ -52,7 +52,7 @@ export default {
                 x = x + 7;
             }
             if (lines[x].indexOf("END:VEVENT") === 0 && name.length !== 0 && prof.length !== 0 && start !== null && end !== null) {
-                list.push(new course(name, prof, loc, start, end));
+                list.push(new course(name, prof, loc, start, end, fullDesc));
                 //TODO remove this and look if some missing or wrong data apears
                 name = "";
                 fullDesc = "";
@@ -64,6 +64,37 @@ export default {
         };
         console.log("end reached with " + list.length + " entities");
         return list;
+    },
+    /**
+     * Get a list from all lectures of the course
+     * @param {Array} list 
+     */
+    getLecturesFromArray(list){
+        let lectures = [];
+        list.forEach(element => {
+            let found = lectures.find(function(elem){
+                return element.name.toString() === elem.toString();
+            });
+            if(found == null){
+                lectures.push(element.name);
+            }
+        });
+        return lectures;
+    },
+    /**
+     * TODO make it more space saving
+     */
+    removeNotSelectedLectures(list, include){
+        let holder = [];
+        list.forEach(element => {
+            let found = include.find(function(elem){
+                return element.name == elem;
+            });
+            if(found != null){
+                holder.push(element);
+            }
+        });
+        return holder;
     },
     //TODO update this shit
     /**

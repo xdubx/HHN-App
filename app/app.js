@@ -5,7 +5,7 @@ import Start from "./components/Start";
 import DrawerContent from "./components/DrawerContent";
 import RadSideDrawer from "nativescript-ui-sidedrawer/vue";
 import RadListView from "nativescript-ui-listview/vue";
-import * as helperService from "./shared/service/helperService";
+import helperService from "./shared/service/helperService";
 Vue.use(RadSideDrawer);
 Vue.use(RadListView);
 
@@ -18,7 +18,8 @@ Vue.config.silent = (TNS_ENV === 'production');
 
 
 // check if it is the first start
-if(!helperService.default.getFirstStartUp()){
+if(!helperService.getFirstStartUp()){
+  console.log("hit");
   new Vue({
     render (h) {
         return h(
@@ -32,8 +33,11 @@ if(!helperService.default.getFirstStartUp()){
       data() {
         return {
           course: "",
-          loc: 0,
+          locId: 0,
+          loc: "",
           sem: 0,
+          lec: [],
+          renderEntities: []
         }
       },
   }).$start();
@@ -51,11 +55,22 @@ if(!helperService.default.getFirstStartUp()){
       },
       data() {
         return {
-          cou: helperService.default.getSavedCourse(),
-          locId: helperService.default.getSavedLocation(),
-          loc: helperService.default.getLocatons()[helperService.default.getSavedLocation()],
-          sem: helperService.default.getSavedSemester(),
+          cou: helperService.getSavedCourse(),
+          locId: helperService.getSavedLocation(),
+          loc: helperService.getLocatons()[helperService.getSavedLocation()],
+          sem: helperService.getSavedSemester(),
+          lec: helperService.getSelectedLectures(),
+          renderEntities: []
         }
+      },
+      mounted() {
+        var self = this;
+        helperService.getDataFromCalender("Lectures").then(function(result){
+            console.log(result);
+            self.renderEntities = result; 
+       }).catch(error => {
+           console.log(error);
+       });     
       },
   }).$start();
 }

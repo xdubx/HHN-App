@@ -14,7 +14,7 @@
             <Label text="Location"/> 
             <ListPicker ref="locPic"  :items="locList" selectedIndex="0"  class="c-picker"></ListPicker> 
             <StackLayout class="hr-light"></StackLayout>
-            <Label text="Push Notifications for:"/> 
+            <Label text="Push Notifications for Changes for:"/> 
             <check-box ref="checkLect" text="Lectures" checked="true" />
             <check-box ref="checkEvent" text="Events" checked="true" />
             <StackLayout class="hr-light"></StackLayout>
@@ -27,9 +27,9 @@
 <script>
 
 import { ListPicker } from "tns-core-modules/ui/list-picker";
-import * as helperService from "../shared/service/helperService";
+import helperService from "../shared/service/helperService";
 import { CheckBox } from '@nstudio/nativescript-checkbox';
-import Home from "./Home";
+import LectureSelector from "./LectureSelector";
 
 export default {
 
@@ -37,7 +37,7 @@ export default {
       return {
         courses: [],
         semester: ["Select Course fist"],
-        locations: ["Select Location"],
+        locations: [],
       }
     },
     methods:{
@@ -45,7 +45,7 @@ export default {
             if(event.value === 0){
                 return;
             }
-            this.semester = helperService.default.getSemesterByCourse(this.courses[event.value]);
+            this.semester = helperService.getSemesterByCourse(this.courses[event.value]);
         },
         saveVarsInAppPrefs(){
             //TODO 
@@ -56,19 +56,21 @@ export default {
                 console.log("Something is not selected");
                 return;
             }
-            helperService.default.saveLocation(locValue);
-            this.$root.loc = locValue;
-            helperService.default.saveCourse(this.$refs.cousePic.nativeView.selectedValue);
-            this.$root.cou = this.$refs.cousePic.nativeView.selectedValue;
-            helperService.default.saveSemester(semValue);
+            helperService.saveLocation(locValue);
+            this.$root.locId = locValue;
             this.$root.sem = semValue;
-            helperService.default.saveLectures(this.$refs.checkLect.nativeView.checked);
-            helperService.default.saveEvent(this.$refs.checkEvent.nativeView.checked);
-            helperService.default.setFirstStartUp();
+            this.$root.cou = this.$refs.cousePic.nativeView.selectedValue;
+            this.$root.loc = this.$refs.locPic.nativeView.selectedValue;
+
+            helperService.saveCourse(this.$refs.cousePic.nativeView.selectedValue);
+            helperService.saveSemester(semValue);
+            helperService.savePushLectures(this.$refs.checkLect.nativeView.checked);
+            helperService.savePushEvent(this.$refs.checkEvent.nativeView.checked);
+            helperService.setFirstStartUp();
 
             //after save push home view
-             this.$navigateTo(Home, {
-                    clearHistory: true
+             this.$navigateTo(LectureSelector, {
+                    clearHistory: false
                 });
         }
     },
@@ -84,8 +86,10 @@ export default {
         }
     },
     beforeMount() {
-        this.courses = helperService.default.getCouseList();
-        this.locations = helperService.default.getLocatons();    
+        this.courses = [];
+        this.locations = [];
+        this.courses = helperService.getCouseList();
+        this.locations = helperService.getLocatons();    
         this.courses.unshift("Select Course");
         this.locations.unshift("Select Location");
     },

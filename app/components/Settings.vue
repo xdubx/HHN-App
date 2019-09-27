@@ -23,13 +23,21 @@
         <StackLayout class="page-content">
             <Label text="Theme" />
              <ListPicker ref="colorPic" :items="colorList" selectedIndex="0"  class="c-picker"></ListPicker> 
+             <Button text="Reset Data" @tap="resetSettings"/>
         </StackLayout>
     </Page>
 </template>
 
 <script>
+/**
+ * Call Start screen
+ * Call couse selector
+ * option to add extern courses
+ */
     import * as utils from "~/shared/utils";
     import SelectedPageService from "../shared/selected-page-service";
+    import Start from "./Start";
+    import helperService from '../shared/service/helperService';
 
     export default {
 
@@ -53,6 +61,17 @@
         methods: {
             onDrawerButtonTap() {
                 utils.showDrawer();
+            },
+            resetSettings(){
+                helperService.clearAppSettings();
+                helperService.clearCalender();
+                this.$root.locId = 0;
+                this.$root.sem = 0;
+                this.$root.cou = "";
+                this.$root.loc = 0;
+                this.$navigateTo(Start, {
+                    clearHistory: false
+                });
             }
         }
     };
