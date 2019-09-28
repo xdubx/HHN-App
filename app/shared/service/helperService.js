@@ -1,4 +1,4 @@
-import * as data from "../data/courseIds";
+import * as data from "../data/appData";
 import * as appSettings from "tns-core-modules/application-settings";
 import * as Calendar from "nativescript-calendar";
 import course from "../models/course";
@@ -13,7 +13,7 @@ export default {
         return holder;
     },
     getSemesterByCourse(key){
-        let holder = Object.keys(data.courses.course[key]);
+        let holder = Object.keys(data.courses.course[key].semester);
         console.log(holder);
         return holder;
     },
@@ -51,11 +51,15 @@ export default {
         list.forEach(element => {
             courses.push(new course(element.title, "",element.location,element.startDate,element.endDate,element.nodes));
         });
-
+        console.log(courses);
         return new Promise(function(resolve, reject) {       
-            resolve(couses);
+            resolve(courses);
         }); 
     },
+    /**
+     * Get Events for this day
+     * @param {Array} list from the Calender plugin with all events 
+     */
     getDataForToDay(list){
         var holder = [];
         var today = new Date();
@@ -70,6 +74,12 @@ export default {
             holder.push({name: "Nohing special today"})
         }
         return holder;
+    },
+    getLinks(){
+        return data.links;
+    },
+    getLectures(){
+        JSON.parse(appSettings.getString("Lectures"));
     },
     //------------- Get Appsettings ------------------
     //TODO Add has function
@@ -95,10 +105,9 @@ export default {
     },
     getSelectedLectures(){
         console.log("lec");
-
-        // let lec = appSettings.getString("Lectures");
-        // let x = JSON.parse(lec);
-        return [];
+        let lec = appSettings.getString("Lectures");
+        let x = JSON.parse(lec);
+        return x;
     },
     //------------- Save ------------------
     saveLocation(location){
@@ -133,7 +142,7 @@ export default {
         appSettings.setString("CalenderIDs", list);
     },
     /**
-     * 
+     * Save data in the calender 
      * @param {Array} list 
      * @param {String} clanderName 
      */
@@ -169,9 +178,16 @@ export default {
             ); 
     },
     //-------------------------------------------
+
+    /**
+     * Clear all settings on the appSettings
+     */
     clearAppSettings(){
         appSettings.clear();
     },
+    /**
+     * Clear all data from the calnder
+     */
     clearCalender(){
         Calendar.deleteCalendar({
             name: "Lectures"
@@ -180,6 +196,10 @@ export default {
             console.log(`Deleted Calendar with id ${id}`);
           });
     },
+    /**
+     * Check if the user graded permissions for the calender plugin
+     * if not the calender get a error
+     */
     requestCalenderPermission(){
         Calendar.hasPermission().then(
             function(granted) {

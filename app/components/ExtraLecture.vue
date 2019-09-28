@@ -8,8 +8,13 @@
                 <Label text="Finish" class="fa action-item icon-gray" verticalAlignment="center" @tap="onFinishTap"/>
            </ActionItem>
         </ActionBar>
-        <GridLayout class="page-content" >        
-            <!-- <StackLayout class="hr-light"></StackLayout> -->
+        <StackLayout class="page-content" > 
+            <Label text="Course"/> 
+            <ListPicker ref="cousePic" :items="couseList" selectedIndex="0"  @selectedIndexChange="selectedIndexChanged" class="c-picker"></ListPicker> 
+            <Label text="Semester"/> 
+            <ListPicker ref="semPic"  :items="semList" selectedIndex="0"  class="c-picker"></ListPicker>        
+            <Button text="Get Lectures" @tap="loadLectures"/>
+            <StackLayout class="hr-light"></StackLayout>
             <RadListView v-if="!isLoading" for="item in lecList"  class="list-group">
                 <ListViewLinearLayout v-tkListViewLayout scrollDirection="Vertical"/>
                     <v-template>
@@ -17,7 +22,7 @@
                     </v-template>
             </RadListView>  
             <ActivityIndicator v-else :busy="isLoading"/>             
-        </GridLayout>
+        </StackLayout>
     </Page>
 </template>
 
@@ -35,6 +40,10 @@ export default {
       return {
         lectures: [],
         entrys: [],
+        semester: ["Select Course fist"],
+        courses: [],
+        semesterInt: "",
+        cousesName: ""
       }
     },
     methods:{
@@ -48,25 +57,52 @@ export default {
                 }     
                 x++;
             });
-            let saveSelection = {};
-            saveSelection[this.$root.cou + "/" + this.$root.sem] = saveList;
+
+            if(saveList.length == 0){
+                //TODO throw error as toast
+                return;
+            }
+
+            //get save lectures
+            let saveSelection = helperService.getLectures();
+            saveSelection[this.cousesName + "/" + this.$root.sem] = saveList;
             let lect = JSON.stringify(saveSelection);
             helperService.saveLectures(lect);
             //after save push home view
             this.lectures = [];
 
             let calenderSyncList = icalPaser.removeNotSelectedLectures(this.entrys, saveList);
-            //console.log(calenderSyncList);
-
             this.$root.renderEntities = calenderSyncList; 
             //TODO exeption by no selected couses
 
-            //TODO Optimize the screen after selection for a wait screen to much couses block the execute stack and the app freeze the sceen 
             helperService.saveDataInCalender(calenderSyncList, "Lectures", 0);
-            //helperService.getDataFromCalender("Lectures");
 
             this.$navigateTo(Home, {
                 clearHistory: true
+            });
+        },
+        selectedIndexChanged(event){
+            if(event.value === 0){
+                return;
+            }
+            this.semester = helperService.getSemesterByCourse(this.courses[event.value]);
+        },
+        loadLectures(){
+            let semValue = parseInt(this.$refs.semPic.nativeView.selectedValue);
+            let courseValue = this.$refs.cousePic.nativeView.selectedIndex;
+
+            // check if selectec values are valid
+
+            if(isNaN(semValue) || courseValue === 0 ) return;
+            var self = this;
+            icalPaser.getIcalString(helperService.getLinkForDownload(this.$refs.cousePic.nativeView.selectedValue, semValue)).then(result =>{
+                let course = icalPaser.paseToCourseArray(result);
+                self.lectures = icalPaser.getLecturesFromArray(course);
+                let sortedByDate = icalPaser.sortByDate(course);
+                self.entrys = icalPaser.sortToOneArray(sortedByDate);
+            }).catch(e =>{
+                //TODO error toast by not internet connection
+                console.log("error in ical result:" + e);
             });
         }
     },
@@ -76,25 +112,16 @@ export default {
         },
         isLoading(){
             return !this.lecList.length;
+        },
+        couseList(){
+            return this.courses;
+        },
+        semList(){
+            return this.semester;
         }
     },
     beforeMount() {
-        //set right conctext in the async funtion
-        var self = this;
-        icalPaser.getIcalString(helperService.getLinkForDownload(this.$root.cou, this.$root.sem)).then(result =>{
-            let course = icalPaser.paseToCourseArray(result);
-            this.lectures = icalPaser.getLecturesFromArray(course);
-            let sortedByDate = icalPaser.sortByDate(course);
-            // ready to set it into the calender
-            this.entrys = icalPaser.sortToOneArray(sortedByDate);
-            //let clearedSort = icalPaser.default.removeOldData(x);
-                
-
-            //TODO save data into calender
-            //TODO error toast by not internet connection
-        }).catch(e =>{
-            console.log("error in ical result:" + e);
-        });
+        this.courses = helperService.getCouseList();
     },
     mounted() {
         helperService.requestCalenderPermission();
@@ -104,7 +131,7 @@ export default {
 <style lang="scss">
     .c-picker {
         background-color: rgb(231, 229, 229);
-        // border-width: 1;
+        border-width: 1;
         height: 100;
         margin: 5 5 5;
         vertical-align: middle;

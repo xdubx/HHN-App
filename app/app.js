@@ -36,7 +36,6 @@ if(!helperService.getFirstStartUp()){
           locId: 0,
           loc: "",
           sem: 0,
-          lec: [],
           renderEntities: []
         }
       },
@@ -59,7 +58,6 @@ if(!helperService.getFirstStartUp()){
           locId: helperService.getSavedLocation(),
           loc: helperService.getLocatons()[helperService.getSavedLocation()],
           sem: helperService.getSavedSemester(),
-          lec: helperService.getSelectedLectures(),
           renderEntities: []
         }
       },

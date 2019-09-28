@@ -34,19 +34,19 @@
                             <Label class="p-b-10">
                                 <FormattedString ios.fontFamily="system">
                                     <Span text.decode="&#xf144;" class="fa text-primary icon-gray"></Span>
-                                    <Span :text="item.start" class="text-left-margin"/> 
+                                    <Span :text="formatString(item.start)" class="text-left-margin"/> 
                                 </FormattedString>
                             </Label>
                             <Label class="p-b-10">
                                 <FormattedString ios.fontFamily="system">
                                     <Span text.decode="&#xf28d;" class="fa text-primary icon-gray"/>
-                                    <Span :text="item.edbd" class="text-left-margin"/> 
+                                    <Span :text="formatString(item.end)" class="text-left-margin"/> 
                                 </FormattedString>
                             </Label>
                             <Label class="p-b-10">
                                 <FormattedString ios.fontFamily="system">
                                     <Span text.decode="&#xf21d;" class="fa text-primary icon-gray"/>
-                                    <Span :text="item.location" class="text-left-margin"/>
+                                    <Span :text="formatString(item.location)" class="text-left-margin"/>
                                 </FormattedString>
                             </Label>
                         </StackLayout>
@@ -95,20 +95,8 @@
                // this.$emit("select", e.item);
                // TODO open modal with details
             },
-            shortText(text){//
-                var holder = text.split("\\");
-                var output = "";
-                if(holder.length > 1){
-                    if(holder[0].length + holder[1].length < 30){
-                        output = holder[0] + holder[1];
-                    }else{
-                        output = holder[0];
-                    }
-                }else{
-                    output = text;
-                }
-                
-                return output;    
+            formatString(text){
+                return " "+ text;
             }
         },
     };
@@ -130,7 +118,7 @@
             margin: 2 3;
         }
         .text-left-margin{
-            margin-left: 5px;
+            margin: 5 0 0 0;
         }
         .icon-green{
             color: $success-dark;

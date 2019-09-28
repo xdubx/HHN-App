@@ -22,9 +22,19 @@
                         <Label col="1" text="Map" class="p-r-10"></Label>
                     </GridLayout>
 
+                    <GridLayout columns="auto, *" :class="'sidedrawer-list-item' + (selectedPage === 'Mensa' ? ' selected': '')" @tap="openBrowser()">
+                        <Label col="0" text.decode="&#xf002;" class="fa"></Label>
+                        <Label col="1" text="Mensa" class="p-r-10"></Label>
+                    </GridLayout>
+
                     <GridLayout columns="auto, *" :class="'sidedrawer-list-item' + (selectedPage === 'Tips' ? ' selected': '')" @tap="onNavigationItemTap(Tips)">
                         <Label col="0" text.decode="&#xf005;" class="fa"></Label>
                         <Label col="1" text="Tips" class="p-r-10"></Label>
+                    </GridLayout>
+
+                    <GridLayout columns="auto, *" :class="'sidedrawer-list-item' + (selectedPage === 'Links' ? ' selected': '')" @tap="onNavigationItemTap(Links)">
+                        <Label col="0" text.decode="&#xf005;" class="fa"></Label>
+                        <Label col="1" text="Links" class="p-r-10"></Label>
                     </GridLayout>
         
                     <StackLayout class="hr-light"></StackLayout>
@@ -50,10 +60,13 @@
     import Calender from "./Calender";
     import Tips from "./Tips";
     import Maps from "./Maps";
+    import Links from "./Links";
     import Settings from "./Settings";
     import About from "./About";
     import * as utils from "~/shared/utils";
     import SelectedPageService from "~/shared/selected-page-service";    
+    import * as utilityModule from "tns-core-modules/utils/utils";
+
     
     export default {
         mounted() {
@@ -66,6 +79,7 @@
                 Calender: Calender,
                 Tips: Tips,
                 Maps: Maps,
+                Links: Links,
                 Settings: Settings,
                 About: About,
                 selectedPage: ""
@@ -84,6 +98,7 @@
             Calender,
             Tips,
             Maps,
+            Links,
             Settings,
             About
         },
@@ -93,7 +108,11 @@
                     clearHistory: true
                 });
                 utils.closeDrawer();
+            },      
+            openBrowser(){
+                utilityModule.openUrl("https://www.studentenwerk.uni-heidelberg.de/node/136");
             }
+             
         }
     };
 </script>

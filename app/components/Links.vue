@@ -16,73 +16,50 @@
                 @tap="onDrawerButtonTap"
                 ios.position="left">
             </ActionItem>
-
-            <Label class="action-bar-title" text="Settings"></Label>
+            <Label class="action-bar-title" text="Quick Links"></Label>
         </ActionBar>
 
         <StackLayout class="page-content">
-            <Label text="Theme" />
-            <ListPicker ref="colorPic" :items="colorList" selectedIndex="0"  class="c-picker"></ListPicker> 
-            <check-box text="Events" checked="true"></check-box>
-            <Button text="Add Extra Lectures" @tap="openExtraLecture"/>
-            <Button text="Reset Data" @tap="resetSettings"/>
+           
         </StackLayout>
+        <RadListView for="item in linkList"  class="list-group">
+            <ListViewLinearLayout v-tkListViewLayout scrollDirection="Vertical"/>
+                <v-template>
+                    <Button :text="item.name" @tap="openSite(item.url)"/>
+                </v-template>
+        </RadListView> 
     </Page>
 </template>
 
 <script>
-/**
- * Call Start screen
- * Call couse selector
- * option to add extern courses
- * autosave on change
- */
 import * as utils from "~/shared/utils";
 import SelectedPageService from "../shared/selected-page-service";
-import Start from "./Start";
+import * as utilityModule from "tns-core-modules/utils/utils";
 import helperService from '../shared/service/helperService';
-import ExtraLectureVue from './ExtraLecture.vue';
-
     export default {
-
         data() {
             return {
-                colorArray: ["Default"],
             }
         },
-
         mounted() {
-            SelectedPageService.getInstance().updateSelectedPage("Settings");
+
         },
         computed: {
             message() {
                 return "<!-- Page content goes here -->";
             },
-            colorList(){
-                return this.colorArray;
+            linkList(){
+                return helperService.getLinks();
             }
         },
         methods: {
             onDrawerButtonTap() {
                 utils.showDrawer();
             },
-            resetSettings(){
-                helperService.clearAppSettings();
-                helperService.clearCalender();
-                this.$root.locId = 0;
-                this.$root.sem = 0;
-                this.$root.cou = "";
-                this.$root.loc = 0;
-                this.$navigateTo(Start, {
-                    clearHistory: false
-                });
-            },
-            openExtraLecture(){
-                this.$navigateTo(ExtraLectureVue, {
-                    clearHistory: false
-                });
+            openSite(url){
+                  utilityModule.openUrl(url);
             }
-        }
+        },
     };
 </script>
 
