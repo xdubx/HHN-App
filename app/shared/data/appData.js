@@ -54,9 +54,16 @@ export const links = [
     { "name": "HIS Portal", "url":"https://webmail.stud.hs-heilbronn.de/"},
     { "name": "SPlan", "url":"https://splan.hs-heilbronn.de"},
     { "name": "Bib", "url":"https://www.hs-heilbronn.de/bibliothek"},
-    { "name": "AStA", "url":"https://vs.hs-heilbronn.de/"},
     { "name": "Examination Office", "url":"https://www.hs-heilbronn.de/19467999/ihre-ansprechpartner-im-pruefungsamt"},
     { "name": "Examination Adjustment Request", "url":"https://www.hs-heilbronn.de/3100396/antrag-auf-ausgleich-einer-pruefungsleistung.pdf"},
+]
+
+export const tips = [
+
+    {"name": "AstA", "desc": "Hier könnte text stehen", "url": "https://vs.hs-heilbronn.de/", "loc": "Sonntheim Room XY"},
+    {"name": "StuPa", "desc": "Hier könnte text stehen", "url": "https://vs.hs-heilbronn.de/", "loc": ""},
+    {"name": "Bootcup", "desc": "Hier könnte text stehen","url": "", "loc": ""}
+
 ]
 // 
 //https://splan.hs-heilbronn.de/splan/ical?lan=de&puid=27&type=pg&pgid=16371

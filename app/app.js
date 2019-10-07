@@ -19,7 +19,6 @@ Vue.config.silent = (TNS_ENV === 'production');
 
 // check if it is the first start
 if(!helperService.getFirstStartUp()){
-  console.log("hit");
   new Vue({
     render (h) {
         return h(
@@ -63,6 +62,7 @@ if(!helperService.getFirstStartUp()){
       },
       mounted() {
         var self = this;
+        self.renderEntities = [];
         helperService.getDataFromCalender("Lectures").then(function(result){
             console.log(result);
             self.renderEntities = result; 

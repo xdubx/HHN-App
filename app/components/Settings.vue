@@ -35,6 +35,8 @@
  * Call Start screen
  * Call couse selector
  * option to add extern courses
+ * add max render time im calender set it default for 14 days
+ * Checkbox for show events
  * autosave on change
  */
 import * as utils from "~/shared/utils";

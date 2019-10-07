@@ -109,31 +109,43 @@ export default {
         var loc = "";
         var start = null;
         var end = null;
+        var descBool = false;
         for (var x = 0; x < lines.length; x++) {
-            if (lines[x].indexOf("SUMMARY") === 0) {
-                name = this.getTextFromIcalString(lines[x]);
-                continue;
-            }
-            if (lines[x].indexOf("DESCRIPTION") === 0) {
-                desc = this.getTextFromIcalString(lines[x]);
-                continue;
-            }
+
+            if(lines[x].indexOf("BEGIN:VEVENT") === 0){
+                
+                name = "";
+                fullDesc = "";
+                prof = "";
+                uuid = "";
+                start = null;
+                end = null;
+
+                start = this.getDateTimeFromIcalString(lines[x+2]);
+                end = this.getDateTimeFromIcalString(lines[x+3]);
+                name = this.getTextFromIcalString(lines[x+7]);
+                x=x+7;
+            }       
             if (lines[x].indexOf("URL") === 0) {
                 url = this.getTextFromIcalString(lines[x]);
+                descBool = false;
                 continue;
             }
             if (lines[x].indexOf("LOCATION") === 0) {
                 loc = this.getTextFromIcalString(lines[x]);
                 continue;
             }
-            if (lines[x].indexOf("DTSTART") === 0) {
-                start = this.getDateTimeFromIcalString(lines[x]);
+            
+            if (lines[x].indexOf("DESCRIPTION") === 0 || descBool == true) {
+                if(descBool){
+                    desc = desc + lines[x];
+                }else{
+                    desc = this.getTextFromIcalString(lines[x]);
+                }
+                descBool = true;
                 continue;
             }
-            if (lines[x].indexOf("DTEND") === 0) {
-                end = this.getDateTimeFromIcalString(lines[x]);
-                continue;
-            }
+
             if (lines[x].indexOf("END:VEVENT") === 0 && name.length !== 0 && desc.length !== 0 && start !== null && end !== null) {
                 list.push(new event(name, desc, url, loc, start, end));
                 // clear vars

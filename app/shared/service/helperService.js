@@ -26,6 +26,10 @@ export default {
         console.log(x);
         return x;
     },
+    /**
+     * get 14 Days from the Calender with the given Name
+     * @param {String} calenderName 
+     */
     async getDataFromCalender(calenderName){
         var options = {
             startDate: new Date(new Date().getTime() - (24*60*60*1000)),
@@ -35,8 +39,8 @@ export default {
         let list =  await Calendar.findEvents(options).then(
             function(events) {
               //console.log(JSON.stringify(events));
-              
-                let eventList = events.filter(function(event){
+                    let eventList =[];
+                    eventList = events.filter(function(event){
                     return event.calendar.name == calenderName;
                 });
                 return eventList;
@@ -75,11 +79,17 @@ export default {
         }
         return holder;
     },
+    /**
+     * get Links from the json file
+     */
     getLinks(){
         return data.links;
     },
     getLectures(){
-        JSON.parse(appSettings.getString("Lectures"));
+        return JSON.parse(appSettings.getString("Lectures"));
+    },
+    getTips(){
+        return data.tips;
     },
     //------------- Get Appsettings ------------------
     //TODO Add has function

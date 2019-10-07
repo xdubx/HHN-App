@@ -65,17 +65,28 @@ export default {
 
             //get save lectures
             let saveSelection = helperService.getLectures();
-            saveSelection[this.cousesName + "/" + this.$root.sem] = saveList;
+            saveSelection[this.cousesName + "/" + this.semesterInt] = saveList;
             let lect = JSON.stringify(saveSelection);
             helperService.saveLectures(lect);
             //after save push home view
             this.lectures = [];
 
             let calenderSyncList = icalPaser.removeNotSelectedLectures(this.entrys, saveList);
-            this.$root.renderEntities = calenderSyncList; 
+            
+            
+           // this.$root.renderEntities = calenderSyncList; 
             //TODO exeption by no selected couses
 
             helperService.saveDataInCalender(calenderSyncList, "Lectures", 0);
+
+            // reload 
+
+            helperService.getDataFromCalender("Lectures").then(function(result){
+                console.log(result);
+                this.$root.renderEntities = result; 
+            }).catch(error => {
+                console.log(error);
+            });
 
             this.$navigateTo(Home, {
                 clearHistory: true

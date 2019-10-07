@@ -18,12 +18,42 @@
             </ActionItem>
             <Label class="action-bar-title" text="Calender"></Label>
         </ActionBar>
-
         <GridLayout class="page-content">
-            <Label class="page-icon fa" text.decode="&#xf1ea;"></Label>
-            <Label class="page-placeholder" :text="message"></Label>
-        </GridLayout>
+            <RadListView v-if="!isLoading" for="item in eventList" @itemTap="onItemTap" class="list-group">
+                <ListViewLinearLayout v-tkListViewLayout scrollDirection="Vertical"/>
+                <v-template>
+                    <GridLayout rows="*, *, *" columns="*" class="list-group-item-content">
+                        <Label :text="item.name" class="text-primary list-group-item-text font-weight-bold"/>
 
+                        <Label row="1" class="hr-light m-t-5 m-b-5" colSpan="2"/>
+
+                        <!-- <Image row="2" :src="item.ImageUrl" stretch="aspectFill" height="120" class="m-r-20" loadMode="async"/> -->
+
+                        <StackLayout row="2" col="0" verticalAlignment="center" class="list-group-item-text">
+                            <Label class="p-b-10">
+                                <FormattedString ios.fontFamily="system">
+                                    <Span text.decode="&#xf144;" class="fa text-primary icon-gray"></Span>
+                                    <Span :text="formatString(item.start)" class="text-left-margin"/> 
+                                </FormattedString>
+                            </Label>
+                            <Label class="p-b-10">
+                                <FormattedString ios.fontFamily="system">
+                                    <Span text.decode="&#xf28d;" class="fa text-primary icon-gray"/>
+                                    <Span :text="formatString(item.end)" class="text-left-margin"/> 
+                                </FormattedString>
+                            </Label>
+                            <Label class="p-b-10">
+                                <FormattedString ios.fontFamily="system">
+                                    <Span text.decode="&#xf21d;" class="fa text-primary icon-gray"/>
+                                    <Span :text="formatString(item.location)" class="text-left-margin"/>
+                                </FormattedString>
+                            </Label>
+                        </StackLayout>
+                    </GridLayout>
+                </v-template>
+            </RadListView>
+            <ActivityIndicator v-else :busy="isLoading"/>
+        </GridLayout>
     </Page>
 </template>
 
@@ -44,6 +74,9 @@
         computed: {
             message() {
                 return "<!-- Page content goes here -->";
+            },
+            eventList(){
+                return this.eventListHolder;
             }
         },
         methods: {
