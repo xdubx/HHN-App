@@ -20,15 +20,13 @@
         </ActionBar>
 
         <GridLayout class="page-content">
-            <RadListView v-if="!isLoading" for="item in eventsList" @itemTap="onItemTap" class="list-group">
+            <RadListView v-if="!isLoading" for="item in eventList" @itemTap="onItemTap" class="list-group">
                 <ListViewLinearLayout v-tkListViewLayout scrollDirection="Vertical"/>
                 <v-template>
                     <GridLayout rows="*, *, *" columns="*" class="list-group-item-content">
                         <Label :text="item.name" class="text-primary list-group-item-text font-weight-bold"/>
 
                         <Label row="1" class="hr-light m-t-5 m-b-5" colSpan="2"/>
-
-                        <!-- <Image row="2" :src="item.ImageUrl" stretch="aspectFill" height="120" class="m-r-20" loadMode="async"/> -->
 
                         <StackLayout row="2" col="0" verticalAlignment="center" class="list-group-item-text">
                             <Label class="p-b-10">
@@ -61,7 +59,7 @@
 
 <script>
 /**
- * TODO Load only the courses for this day + events + mensa link 
+ * TODO Load only the courses for this day + events
  */
 
     import * as utils from "~/shared/utils";
@@ -83,8 +81,8 @@
             isLoading() {
                 return !this.eventsList.length;
             },
-            eventsList(){
-                return helperService.getDataForToDay(this.$root.renderEntities);
+            eventList(){
+                return eventsListHolder;
             }
         },
         methods: {
@@ -98,6 +96,11 @@
             formatString(text){
                 return " "+ text;
             }
+        },
+        created() {
+            // reset eventlist
+            this.eventsListHolder = [];
+            this.eventListHolder = helperService.getDataForToDay(this.$root.renderEntities);
         },
     };
 </script>
