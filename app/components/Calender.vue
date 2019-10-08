@@ -69,7 +69,7 @@
         },
         mounted() {
             SelectedPageService.getInstance().updateSelectedPage("Calender");
-             this.eventListHolder = this.$root.renderEntities;
+            this.eventListHolder = this.$root.renderEntities;
         },
         computed: {
             message() {
@@ -77,11 +77,17 @@
             },
             eventList(){
                 return this.eventListHolder;
+            },
+            isLoading() {
+                return !this.eventListHolder.length;
             }
         },
         methods: {
             onDrawerButtonTap() {
                 utils.showDrawer();
+            },
+            formatString(text){
+                return " "+ text;
             }
         }
     };
@@ -93,4 +99,24 @@
     // End custom common variables
 
     // Custom styles
+        // Custom styles
+      .list-group {
+        .list-group-item-content {
+            padding: 8 15 4 15;
+            background-color: $background-light;
+        }
+
+        .list-group-item-text {
+            margin: 2 3;
+        }
+        .text-left-margin{
+            margin: 5 0 0 0;
+        }
+        .icon-green{
+            color: $success-dark;
+        }
+        .icon-gray{
+            color: $item-color-android;
+        }
+    }
 </style>
