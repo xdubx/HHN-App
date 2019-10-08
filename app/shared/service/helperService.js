@@ -22,7 +22,7 @@ export default {
         return data.locations.slice(0);
     },
     getLinkForDownload(cou, sem){
-        let x = data.courses.course[cou][sem];
+        let x = data.courses.course[cou].semester[sem];
         console.log(x);
         return x;
     },
@@ -69,7 +69,7 @@ export default {
         var today = new Date();
         if(list.length){
             list.forEach(element => {
-                if(element.start.getDay() == today.getDay() && element.start.getMonth() == today.getMonth()){
+                if(element.start.getDate() == today.getDate() && element.start.getMonth() == today.getMonth()){
                     holder.push(element);
                 }
             });

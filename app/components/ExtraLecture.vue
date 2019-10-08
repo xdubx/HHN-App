@@ -10,7 +10,7 @@
         </ActionBar>
         <StackLayout class="page-content" > 
             <Label text="Course"/> 
-            <ListPicker ref="cousePic" :items="couseList" selectedIndex="0"  @selectedIndexChange="selectedIndexChanged" class="c-picker"></ListPicker> 
+            <ListPicker ref="coursePic" :items="couseList" selectedIndex="0"  @selectedIndexChange="selectedIndexChanged" class="c-picker"></ListPicker> 
             <Label text="Semester"/> 
             <ListPicker ref="semPic"  :items="semList" selectedIndex="0"  class="c-picker"></ListPicker>        
             <Button text="Get Lectures" @tap="loadLectures"/>
@@ -100,13 +100,13 @@ export default {
         },
         loadLectures(){
             let semValue = parseInt(this.$refs.semPic.nativeView.selectedValue);
-            let courseValue = this.$refs.cousePic.nativeView.selectedIndex;
+            let courseValue = this.$refs.coursePic.nativeView.selectedIndex;
 
             // check if selectec values are valid
 
             if(isNaN(semValue) || courseValue === 0 ) return;
             var self = this;
-            icalPaser.getIcalString(helperService.getLinkForDownload(this.$refs.cousePic.nativeView.selectedValue, semValue)).then(result =>{
+            icalPaser.getIcalString(helperService.getLinkForDownload(this.$refs.coursePic.nativeView.selectedValue, semValue)).then(result =>{
                 let course = icalPaser.paseToCourseArray(result);
                 self.lectures = icalPaser.getLecturesFromArray(course);
                 let sortedByDate = icalPaser.sortByDate(course);

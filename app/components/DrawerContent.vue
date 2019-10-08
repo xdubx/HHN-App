@@ -23,12 +23,12 @@
                     </GridLayout>
 
                     <GridLayout columns="auto, *" :class="'sidedrawer-list-item' + (selectedPage === 'Mensa' ? ' selected': '')" @tap="openBrowser()">
-                        <Label col="0" text.decode="&#xf002;" class="fa"></Label>
+                        <Label col="0" text.decode="&#xf563;" class="fa"></Label>
                         <Label col="1" text="Mensa" class="p-r-10"></Label>
                     </GridLayout>
 
                     <GridLayout columns="auto, *" :class="'sidedrawer-list-item' + (selectedPage === 'Tips' ? ' selected': '')" @tap="onNavigationItemTap(Tips)">
-                        <Label col="0" text.decode="&#xf005;" class="fa"></Label>
+                        <Label col="0" text.decode="&#xf7b6;" class="fa"></Label>
                         <Label col="1" text="Tips" class="p-r-10"></Label>
                     </GridLayout>
 

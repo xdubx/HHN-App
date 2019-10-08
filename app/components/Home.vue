@@ -79,10 +79,10 @@
                 return "<!-- Page content goes here -->";
             },
             isLoading() {
-                return !this.eventsList.length;
+                return !this.eventList.length;
             },
             eventList(){
-                return eventsListHolder;
+                return this.eventListHolder;
             }
         },
         methods: {
@@ -99,8 +99,15 @@
         },
         created() {
             // reset eventlist
-            this.eventsListHolder = [];
-            this.eventListHolder = helperService.getDataForToDay(this.$root.renderEntities);
+            var self = this;
+             helperService.getDataFromCalender("Lectures").then(function(result){
+                self.$root.renderEntities = result;
+                self.eventListHolder = [];
+                self.eventListHolder = helperService.getDataForToDay(self.$root.renderEntities);
+            }).catch(error => {
+                console.log(error);
+            });     
+            
         },
     };
 </script>

@@ -30,6 +30,9 @@
 
                         <!-- <Image row="2" :src="item.ImageUrl" stretch="aspectFill" height="120" class="m-r-20" loadMode="async"/> -->
                         <!-- TODO text area here for desc and right corner for open website--> 
+                        <StackLayout>
+                            <TextView v-model="item.desc" />
+                        </StackLayout>
                         <StackLayout row="2" col="0" verticalAlignment="center" class="list-group-item-text">
                             <Label class="p-b-10">
                                 <FormattedString ios.fontFamily="system">
@@ -73,11 +76,17 @@
         computed: {
             tipList(){
                 return this.tipListHolder;
+            },
+            isLoading() {
+                return !this.tipList.length;
             }
         },
         methods: {
             onDrawerButtonTap() {
                 utils.showDrawer();
+            },
+            formatString(text){
+                return " "+ text;
             }
         },
         created() {

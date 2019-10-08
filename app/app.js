@@ -59,17 +59,7 @@ if(!helperService.getFirstStartUp()){
           sem: helperService.getSavedSemester(),
           renderEntities: []
         }
-      },
-      mounted() {
-        var self = this;
-        self.renderEntities = [];
-        helperService.getDataFromCalender("Lectures").then(function(result){
-            console.log(result);
-            self.renderEntities = result; 
-       }).catch(error => {
-           console.log(error);
-       });     
-      },
+      }
   }).$start();
 }
 
