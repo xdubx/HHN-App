@@ -32,6 +32,8 @@
 </template>
 
 <script>
+
+// TODO render buttons as win 10 tile
 import * as utils from "~/shared/utils";
 import SelectedPageService from "../shared/selected-page-service";
 import * as utilityModule from "tns-core-modules/utils/utils";
@@ -42,7 +44,7 @@ import helperService from '../shared/service/helperService';
             }
         },
         mounted() {
-
+            SelectedPageService.getInstance().updateSelectedPage("Links");
         },
         computed: {
             message() {

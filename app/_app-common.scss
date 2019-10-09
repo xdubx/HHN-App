@@ -23,6 +23,27 @@
     }
 }
 
+/* Format ListView */
+.list-group {
+    .list-group-item-content {
+        padding: 8 15 4 15;
+        background-color: $background-light;
+    }
+
+    .list-group-item-text {
+        margin: 2 3;
+    }
+    .text-left-margin{
+        margin: 5 0 0 0;
+    }
+    .icon-green{
+        color: $success-dark;
+    }
+    .icon-gray{
+        color: $item-color-android;
+    }
+}
+
 /* Action bar*/
 ActionBar .action-bar-title {
     horizontal-align: center;
