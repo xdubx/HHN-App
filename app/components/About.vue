@@ -20,12 +20,13 @@
         </ActionBar>
 
         <StackLayout class="page-content">
-            <Label class="page-icon fa" text.decode="&#xf005;"></Label>
-            <Label class="page-placeholder" :text="message"></Label>
             <Label class="" text="Data Protection & Privacy"></Label>
-            <!-- TOOD add text -->
-            <Label class="" text="Do you want to extend the app or have suggestions what is missing? Then contact me:"></Label>
-            <Label class="" text="Souce Code: LINK TO GITHUB"></Label>
+             <TextView editable="false" text="All data collected in this app is stored locally on your device. 
+             No data will be sent to the internet, only downloaded. This only includes the lecture information. " />
+            <StackLayout class="hr-light"></StackLayout>
+            <TextView editable="false" text="Do you want to extend the app or have suggestions what is missing? Then contact me:" />
+            <TextView editable="false" text="Souce Code: https://github.com/xdubx/HHN-App" />
+
         </StackLayout>
     </Page>
 </template>
@@ -33,9 +34,9 @@
 <script>
 /**
  * TODO load from file json with array informations render it as card informations
+ * update textview with tap to open link
  * 
  * 
- * All data collected in this app is stored locally on your device. No data will be sent to the internet, only downloaded. This only includes the lecture information. 
  * 
  * 
  * 

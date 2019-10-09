@@ -31,7 +31,7 @@
                         <!-- <Image row="2" :src="item.ImageUrl" stretch="aspectFill" height="120" class="m-r-20" loadMode="async"/> -->
                         <!-- TODO text area here for desc and right corner for open website--> 
                         <StackLayout>
-                            <TextView v-model="item.desc" />
+                            <TextView editable="false" :text="item.desc" />
                         </StackLayout>
                         <StackLayout row="2" col="0" verticalAlignment="center" class="list-group-item-text">
                             <Label class="p-b-10">
